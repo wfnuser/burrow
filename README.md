@@ -1,2 +1,2 @@
 # burrow
-A Distributed Cache Implementation for Golang
+A Distributed Cache Library for Golang.
