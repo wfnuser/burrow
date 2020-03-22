@@ -2,6 +2,8 @@ package lru
 
 import (
 	"fmt"
+	"math/rand"
+	"strconv"
 	"testing"
 )
 
@@ -34,4 +36,18 @@ func TestPutAndGetAfterCapacityFull(t *testing.T) {
 
 	lru.Delete("key1")
 	fmt.Printf("%v\n", lru.GetEntriesNumber())
+}
+
+// should fail
+func TestPutBurrow(t *testing.T) {
+	lru := New(5)
+	lru.Put("test", 0)
+
+	for i := 0; i < 10000; i++ {
+		go lru.Put(strconv.Itoa(rand.Intn(10)), i)
+		go lru.Get(strconv.Itoa(rand.Intn(10)))
+	}
+
+	v, ok := lru.Get("test")
+	fmt.Printf("%v %v\n", v, ok)
 }

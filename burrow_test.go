@@ -2,6 +2,8 @@ package burrow
 
 import (
 	"fmt"
+	"math/rand"
+	"strconv"
 	"testing"
 )
 
@@ -25,11 +27,13 @@ func increment(b *Burrow, key string) {
 	}
 }
 
+// won't fail; you should compare it to lru_test.go
 func TestPutBurrow(t *testing.T) {
 	b := NewBurrow("test", 2)
 	b.Put("test", 0)
-	for i := 0; i < 100; i++ {
-		go increment(b, "test")
+	for i := 0; i < 10000; i++ {
+		go b.Put(strconv.Itoa(rand.Intn(10)), i)
+		go b.Get(strconv.Itoa(rand.Intn(10)))
 	}
 	v, ok := b.Get("test")
 
