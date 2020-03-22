@@ -28,7 +28,7 @@ func TestPutAndGetAfterCapacityFull(t *testing.T) {
 	if _, ok := lru.Get("key"); ok {
 		t.Fatalf("cache hit key=key failed")
 	}
-	if v, ok := lru.Get("key1"); !ok || string(v.(string)) != "test value1" {
+	if v, ok := lru.Get("key1"); !ok || v.(string) != "test value1" {
 		t.Fatalf("cache hit key=key1 failed")
 	}
 
