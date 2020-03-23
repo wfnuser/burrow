@@ -65,10 +65,8 @@ func (b *Burrow) Get(key string) (value lru.Value, ok bool) {
 	if originOk {
 		b.burrow.put(key, originValue)
 		return originValue, originOk
-	} else {
-		return nil, false
 	}
-
+	return nil, false
 }
 
 // Delete used to delete key-value from burrow
