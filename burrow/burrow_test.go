@@ -1,7 +1,9 @@
 package burrow
 
 import (
+	"burrow/lru"
 	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 	"testing"
@@ -9,14 +11,34 @@ import (
 
 type String string
 
-func TestGetBurrow(t *testing.T) {
-	b := NewBurrow("test", 2)
-	b.Put("key1", "value1")
-	b.Put("key2", "value2")
-	b.Put("key3", "value3")
+var db = map[string]string{
+	"Tom":  "630",
+	"Jack": "589",
+	"Sam":  "567",
+}
 
-	nb := GetBurrow("test")
-	fmt.Printf("namespace is: %s \n", nb.namespace)
+func TestGetBurrow(t *testing.T) {
+	loadCounts := make(map[string]int, len(db))
+
+	b := NewBurrow("test", 2, FuncGetter(
+		func(key string) (lru.Value, bool) {
+			log.Println("Fetch data from datasource by: ", key)
+			if v, ok := db[key]; ok {
+				if _, ok := loadCounts[key]; !ok {
+					loadCounts[key] = 0
+				}
+				loadCounts[key]++
+				return v, true
+			}
+			return nil, false
+		}))
+
+	b.Get("Tom")
+	b.Get("Tom")
+	b.Get("Jack")
+	b.Get("Sam")
+	// nb := GetBurrow("test")
+	// fmt.Printf("namespace is: %s \n", nb.namespace)
 }
 
 func increment(b *Burrow, key string) {
@@ -29,7 +51,8 @@ func increment(b *Burrow, key string) {
 
 // won't fail; you should compare it to lru_test.go
 func TestPutBurrow(t *testing.T) {
-	b := NewBurrow("test", 2)
+	b := NewBurrow("test", 2, FuncGetter(
+		func(key string) (value lru.Value, ok bool) { return }))
 	b.Put("test", 0)
 	for i := 0; i < 10000; i++ {
 		go b.Put(strconv.Itoa(rand.Intn(10)), i)
