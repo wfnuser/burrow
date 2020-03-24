@@ -1,6 +1,7 @@
 package burrow
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -46,6 +47,7 @@ func (p *HTTPPool) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	str := fmt.Sprint(value)
 	w.Header().Set("Content-Type", "application/octet-stream")
-	w.Write(value.([]byte))
+	w.Write([]byte(str))
 }

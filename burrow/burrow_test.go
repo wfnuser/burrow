@@ -12,9 +12,9 @@ import (
 type String string
 
 var db = map[string]string{
-	"Tom":  "630",
-	"Jack": "589",
-	"Sam":  "567",
+	"6.824": "MIT",
+	"15213": "CMU",
+	"15445": "CMU",
 }
 
 func TestGetBurrow(t *testing.T) {
@@ -33,10 +33,10 @@ func TestGetBurrow(t *testing.T) {
 			return nil, false
 		}))
 
-	b.Get("Tom")
-	b.Get("Tom")
-	b.Get("Jack")
-	b.Get("Sam")
+	b.Get("6.824")
+	b.Get("6.824")
+	b.Get("15213")
+	b.Get("15445")
 	// nb := GetBurrow("test")
 	// fmt.Printf("namespace is: %s \n", nb.namespace)
 }
