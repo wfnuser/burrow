@@ -32,15 +32,14 @@ var (
 
 // NewBurrow used to create a burrow with namespace
 func NewBurrow(namespace string, capacity int, getter Getter) *Burrow {
-	mu.Lock()
-	defer mu.Unlock()
 
 	b := &Burrow{
 		namespace: namespace,
 		getter:    getter,
 		burrow:    cache{capacity: capacity},
 	}
-
+	mu.Lock()
+	defer mu.Unlock()
 	burrows[namespace] = b
 	return b
 }
