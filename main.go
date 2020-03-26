@@ -23,6 +23,6 @@ func main() {
 			return nil, false
 		}))
 
-	server := burrow.NewHTTPPool()
+	server := burrow.NewHTTPPool("test")
 	http.ListenAndServe("localhost:9999", server)
 }
