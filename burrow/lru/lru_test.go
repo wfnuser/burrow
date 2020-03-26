@@ -7,8 +7,6 @@ import (
 	"testing"
 )
 
-type String string
-
 func TestPutAndGet(t *testing.T) {
 	lru := New(10)
 	lru.Put("key", "test value")
