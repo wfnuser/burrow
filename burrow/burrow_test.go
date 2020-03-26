@@ -24,9 +24,6 @@ func TestGetBurrow(t *testing.T) {
 		func(key string) (lru.Value, bool) {
 			log.Println("Fetch data from datasource by: ", key)
 			if v, ok := db[key]; ok {
-				if _, ok := loadCounts[key]; !ok {
-					loadCounts[key] = 0
-				}
 				loadCounts[key]++
 				return v, true
 			}
