@@ -22,7 +22,12 @@ func main() {
 			}
 			return nil, false
 		}))
-
-	server := burrow.NewHTTPPool("test")
-	http.ListenAndServe("localhost:9999", server)
+	servers := []string{"localhost:5001", "localhost:5002", "localhost:5003"}
+	for _, serverURL := range servers {
+		server := burrow.NewHTTPPoolWithServers(serverURL, servers)
+		go func(serverURL string) {
+			http.ListenAndServe(serverURL, server)
+		}(serverURL)
+	}
+	select {}
 }
