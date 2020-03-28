@@ -1,7 +1,7 @@
 # burrow
 A Distributed Cache Library for Golang.
 
-This is a toy project for learning cache. It should not be used in production.
+This is a toy project for learning how distributed cache work. It should not be used in production.
 
 # How to use
 ```
