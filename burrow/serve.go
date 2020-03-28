@@ -44,9 +44,11 @@ func NewHTTPPoolWithServers(serverID string, servers []string) *HTTPPool {
 	}
 }
 
-func fetchRemote(namespace string, key string) (value lru.Value, ok bool) {
+func fetchRemote(namespace string, key string, server string) (value lru.Value, ok bool) {
+	fmt.Println("start fetch data")
 	u := fmt.Sprintf(
-		"%v%v/%v",
+		"http://%v%v%v/%v",
+		server,
 		defaultBasePath,
 		url.QueryEscape(namespace),
 		url.QueryEscape(key),
@@ -66,7 +68,8 @@ func fetchRemote(namespace string, key string) (value lru.Value, ok bool) {
 		return nil, false
 	}
 
-	return bytes, true
+	//TODO: should use bytes instead of string...
+	return string(bytes), true
 }
 
 // TODO: should remove w in fetch method
@@ -80,6 +83,15 @@ func (p *HTTPPool) fetch(key string, namespace string, w http.ResponseWriter) (v
 
 	server := p.hashRing.Get(key)
 	fmt.Printf("%v\n", server)
+	if server != p.serverID {
+		value, ok = fetchRemote(namespace, key, server)
+		fmt.Printf("%v\n", value)
+		if !ok {
+			http.Error(w, "remote server error", http.StatusInternalServerError)
+			return
+		}
+		return value, ok
+	}
 
 	value, ok = burrow.Get(key)
 	if !ok {
