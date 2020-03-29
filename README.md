@@ -1,5 +1,5 @@
 # burrow
-A Distributed Cache Library for Golang.
+A Distributed Cache Library for Golang. BTW, Burrow is where gophers live! Star it and gopher will be happy.😄
 
 This is a toy project for learning how distributed cache work. It should not be used in production.
 
